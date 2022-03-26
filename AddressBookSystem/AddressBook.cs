@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AddressBookSystem
@@ -33,6 +34,7 @@ namespace AddressBookSystem
         String fname = null; //empty string
         String lname, address, city, state, phone, zip, email; //Declaring (Creating) Variables
 
+
         public void AddRecord() //Addidng new person without duplication
         {
             int i = 0;
@@ -60,27 +62,13 @@ namespace AddressBookSystem
 
             Console.Write("Enter Zip:- ");    //Take input user
             zip = Console.ReadLine();         //Store input for zip
-            //while (!ZipValidation(zip))
-            //{
-            //    Console.Write(zip + " is Invalid Zip Code \nPlease Enter Valid Zip:- ");
-            //    zip = Console.ReadLine();
-            //}
 
             Console.Write("Enter Phone Number:- "); //Take input user
             phone = Console.ReadLine();           //Store input for phone
-            //while (!PhoneNumberValidation(phone))
-            //{
-            //    Console.Write(phone + " is Invalid Phone Number \nPlease Enter Valid Number:- ");
-            //    phone = Console.ReadLine();
-            //}
 
             Console.Write("Enter Email:- ");  //Take input user
             email = Console.ReadLine();           //Store input for email
-            //while (!EmailValidation(email))
-            //{
-            //    Console.Write(email + " is Invalid Email \nPlease Enter Valid Email:- ");
-            //    email = Console.ReadLine();
-            //}
+
 
             Person person = new Person(fname, lname, address, city, state, phone, zip, email);
             list.Add(person);   //adding list data person
@@ -271,5 +259,98 @@ namespace AddressBookSystem
             }
         }
 
+        private static List<Person> contacts = new List<Person>();
+        public static Dictionary<string, List<Person>> cityBook = new Dictionary<string, List<Person>>();
+        public static Dictionary<string, List<Person>> stateBook = new Dictionary<string, List<Person>>();
+
+        //This method for add person details by using city name
+        public void AddByCity()
+        {
+            foreach (var Detail in contacts)
+            {
+                string city = Detail.City;
+                if (cityBook.ContainsKey(city))
+                {
+                    List<Person> exist = cityBook[city];
+                    exist.Add(Detail);
+                }
+                else
+                {
+                    List<Person> cityContact = new List<Person>();
+                    cityContact.Add(Detail);
+                    cityBook.Add(city, cityContact);
+                }
+            }
+        }
+        //This method for add person details by using  state name
+        public void AddByState()
+        {
+            foreach (var Detail in contacts)
+            {
+                string state = Detail.State;
+                if (stateBook.ContainsKey(state))
+                {
+                    List<Person> exists = stateBook[state];
+                    exists.Add(Detail);
+
+                }
+                else
+                {
+                    List<Person> stateContact = new List<Person>();
+                    stateContact.Add(Detail);
+                    stateBook.Add(state, stateContact);
+                }
+            }
+        }
+
+        public static void CountByCityOrStateName()
+        {
+            Console.WriteLine("Select 1 : count person by city, \n2: Count person by state");
+            int num = Convert.ToInt32(Console.ReadLine());
+            void CountByCity()
+            {
+                foreach (var item in cityBook)
+                {
+                    int count = item.Value.Count();
+                    Console.WriteLine("There are {0} number of people in City- {1}", count, item.Key);
+                }
+            }
+            void CountBystate()
+            {
+                foreach (var item in stateBook)
+                {
+                    int count = item.Value.Count();
+                    Console.WriteLine("There are {0} number of people in City- {1}", count, item.Key);
+                }
+            }
+
+            if (num == 1)
+            {
+                //When there are atleast 1 entry
+                if (cityBook.Count != 0)
+                {
+                    CountByCity();
+                }
+                else
+                {
+                    Console.WriteLine("Currently no entries stored");
+                }
+            }
+            else if (num == 2)
+            {
+                if (stateBook.Count != 0)
+                {
+                    CountBystate();
+                }
+                else
+                {
+                    Console.WriteLine("Currently no entries stored");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid selection, please select between 1 and 2");
+            }
+        }
     }
 }
