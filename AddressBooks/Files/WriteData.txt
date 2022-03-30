@@ -1,9 +1,0 @@
-First Name -Payal
-Last Name -banode
-Address -shlds
-Phone Number - 8793819197
-Email ID -payalbanode0@gmail.com
-City -nagpur
-State -maharashtra
-ZIP Code -440034
---------------------------------------------------------------
